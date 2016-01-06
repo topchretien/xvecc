@@ -36,5 +36,5 @@ setup(
     install_requires=['argparse', 'requests'],
     entry_points="""
         [console_scripts]
-            vecc = vecc.vecc:main"""
+            xvecc = xvecc.xvecc:main"""
 )
