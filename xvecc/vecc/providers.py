@@ -28,9 +28,9 @@ PROVIDERS = {
                           'src="{video_link}" frameborder="0"></iframe>',
         'validation_template': 'http://vimeo.com/{video_id}',
         'matches': [
-            r"""vimeo.[^/]+/([^"'/&?@]+)""",
             r"""vimeo.[^/]+/video/([^"'/&?@]+)""",
             r"""vimeo.[^/]+/moogaloop.swf\?clip_id=([^"'/&?@]+)""",
+            r"""vimeo.[^/]+/([^"'/&?@]+)""",
         ]
     },
     'google': {
