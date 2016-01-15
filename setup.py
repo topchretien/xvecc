@@ -9,7 +9,7 @@ with open('README.rst') as readme:
 
 setup(
     name='xvecc',
-    version=__import__('xvecc').__version__,
+    version='2.0', # __import__('xvecc').__version__,
     author='Mathieu Agopian and more',
     author_email='mathieu.agopian@gmail.com',
     packages=find_packages(),
