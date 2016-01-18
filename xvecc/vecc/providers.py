@@ -15,7 +15,7 @@ PROVIDERS = {
                           'src="{video_link}" frameborder="0"></iframe>',
         'validation_template': 'http://www.youtube.com/watch?v={video_id}',
         'matches': [
-            r"""youtube.[^/]+/watch\?v\=([^"'/&?@]+)""",
+            r"""youtube.[^/]+/watch\?[^v]*v\=([^"'/&?@]+)""",
             r"""youtu.be/([^"'/&?@]+)""",
             r"""youtube.[^/]+/v/([^"'/&?@]+)""",
             r"""youtube.[^/]+/embed/([^"'/&?@]+)""",
@@ -30,6 +30,8 @@ PROVIDERS = {
         'matches': [
             r"""vimeo.[^/]+/video/([^"'/&?@]+)""",
             r"""vimeo.[^/]+/moogaloop.swf\?clip_id=([^"'/&?@]+)""",
+            r"""vimeo.[^/]+/[a-z]+/([^a-z"'/&?@]+)""",
+            r"""vimeo.[^/]+/[a-z]+/[a-z]+/([^a-z"'/&?@]+)""",
             r"""vimeo.[^/]+/([^"'/&?@]+)""",
         ]
     },
