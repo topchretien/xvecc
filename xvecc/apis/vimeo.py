@@ -79,6 +79,9 @@ class VimeoAPI(WebAPI):
             if vduration > val:
                 vduration = vduration / val
                 duration_list.append(vduration % val)
+            else:
+                vduration = 0
+                break
         duration_str = ":".join([str(e) for e in reversed(duration_list)])
 
         if vduration > 24:
@@ -120,7 +123,7 @@ class VimeoAPI(WebAPI):
         if not self._results:
             self._results = {
                 'title': self._data['name'],
-                'description': self._data['description'],
+                'description': self._data['description'] if self._data['description'] else "",
                 'image': self._get_best_picture(self._data['pictures']),
                 'duration': self._parse_duration(self._data['duration']),
                 'status': self._is_ok(

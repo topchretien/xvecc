@@ -79,9 +79,10 @@ class YoutubeAPI(WebAPI):
             return {}
         if not self._results:
             our_video = self._data['items'][0]
+            desc = our_video['snippet']['description']
             self._results = {
                 'title': our_video['snippet']['title'],
-                'description': our_video['snippet']['description'],
+                'description': desc if desc else "",
                 'image': our_video['snippet']['thumbnails']['high']['url'],
                 'duration': self._parse_duration(
                     our_video['contentDetails']['duration']),

@@ -73,7 +73,7 @@ class DailymotionAPI(WebAPI):
             our_video = self._data
             self._results = {
                 'title': our_video['title'],
-                'description': our_video['description'],
+                'description': our_video['description'] if our_video['description'] else "",
                 'image': our_video['thumbnail_url'],
                 'duration': self._parse_duration(
                     our_video['duration']),
