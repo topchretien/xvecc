@@ -7,6 +7,52 @@ List here the video providers that should be used to match a video.
 
 """
 
+LIVE_PROVIDERS = {
+    'youtube': {
+        'link_template': '//www.youtube.com/embed/'
+                         '{video_id}?autoplay=1&rel=0',
+        'embed_template': '<iframe width="480" height="395" '
+                          'src="{video_link}" frameborder="0"></iframe>',
+        'validation_template': 'http://www.youtube.com/watch?v={video_id}',
+        'matches': [
+            r"""youtube.[^/]+/watch\?[^v]*v\=([^"'/&?@]+)""",
+            r"""youtu.be/([^"'/&?@]+)""",
+            r"""youtube.[^/]+/v/([^"'/&?@]+)""",
+            r"""youtube.[^/]+/embed/([^"'/&?@]+)""",
+        ]
+    },
+    'creacast': {
+        'link_template': 'http://www.creacast.com/'
+                         '{video_id}',
+        'embed_template': '<iframe width="480" height="395" '
+                          'src="{video_link}" frameborder="0"></iframe>',
+        'validation_template': 'http://www.creacast.com/{video_id}',
+        'matches': [
+            r"""creacast.[^/]+/([^"'/]+)""",
+        ]
+    },
+    'piksel': {
+        'link_template': 'http://player.piksel.com/'
+                         '{video_id}',
+        'embed_template': '<iframe width="480" height="395" '
+                          'src="{video_link}" frameborder="0"></iframe>',
+        'validation_template': 'http://player.piksel.com/{video_id}',
+        'matches': [
+            r"""piksel.[^/]+/([^"'/]+)""",
+        ]
+    },
+    'lightcastmedia': {
+        'link_template': 'http://{video_id}',
+        'embed_template': '<iframe width="480" height="395" '
+                          'src="{video_link}" frameborder="0"></iframe>',
+        'validation_template': '{video_id}',
+        'matches': [
+            r"""([a-zA-Z0-9]+\.lightcastmedia.[^/]+/.+)""",
+        ]
+    },
+}
+
+
 PROVIDERS = {
     'youtube': {
         'link_template': '//www.youtube.com/embed/'
