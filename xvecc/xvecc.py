@@ -14,12 +14,14 @@ from apis.webapi import APIError
 from apis.youtube import YoutubeAPI
 from apis.dailymotion import DailymotionAPI
 from apis.vimeo import VimeoAPI
+from apis.facebook import FacebookAPI
 
 
 PROVIDERS_API = {
     'youtube': YoutubeAPI,
     'dailymotion': DailymotionAPI,
     'vimeo': VimeoAPI,
+    'facebook': FacebookAPI,
 }
 
 

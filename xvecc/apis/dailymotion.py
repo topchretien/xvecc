@@ -7,7 +7,7 @@ import json
 import requests
 import re
 
-from .webapi import WebAPI, APIError
+from .webapi import WebAPI, APIError, convertduration
 
 
 class DailymotionAPI(WebAPI):
@@ -46,13 +46,6 @@ class DailymotionAPI(WebAPI):
             error_msg = 'HTTP Server Error'
         raise APIError(answer.status_code, error_msg)
 
-    def _parse_duration(self, dduration):
-        """Convert Dailymotion duration (ISO 8601 format) to %H:%M:%S duration."""
-        m, s = divmod(int(dduration), 60)
-        h, m = divmod(m, 60)
-
-        return "%d:%02d:%02d" % (h, m, s)
-
     def _is_ok(self, status):
         """Extract privacy policy and upload status to determine availability."""
         if status == "published":
@@ -75,7 +68,7 @@ class DailymotionAPI(WebAPI):
                 'title': our_video['title'],
                 'description': our_video['description'] if our_video['description'] else "",
                 'image': our_video['thumbnail_url'],
-                'duration': self._parse_duration(
+                'duration': convertduration(
                     our_video['duration']),
                 'status': self._is_ok(our_video['status'])
             }

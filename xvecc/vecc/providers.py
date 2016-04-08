@@ -122,4 +122,16 @@ PROVIDERS = {
             r"""flashvars='.*?id=([^"'/&?@]+).*?tvButtonID=crosstv""",
         ]
     },
+    'facebook': {
+        'link_template': '//www.facebook.com/video/embed?video_id={video_id}',
+        'embed_template': '<iframe width="480" height="395" '
+                          'src="{video_link}" frameborder="0"></iframe>',
+        'validation_template': 'https://www.facebook.com/video.php?v='
+                               '{video_id}',
+        'matches': [
+            r"""facebook.[^/]+/video.php\?[^v]*v\=([^"'/&?@]+)""",
+            r"""facebook.[^/]+/video/embed\?video_id\=([^"'/&?@]+)""",
+            r"""facebook.[^/]+/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+/([^"'/&?@]+)""",
+        ]
+    },
 }
