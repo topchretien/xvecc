@@ -131,7 +131,7 @@ PROVIDERS = {
         'matches': [
             r"""facebook.[^/]+/video.php\?[^v]*v\=([^"'/&?@]+)""",
             r"""facebook.[^/]+/video/embed\?video_id\=([^"'/&?@]+)""",
-            r"""facebook.[^/]+/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+/([^"'/&?@]+)""",
+            r"""facebook.[^/]+/[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+/([^"'/&?@]+)""",
         ]
     },
 }
