@@ -31,7 +31,7 @@ def extract(code, extensions = ['mp4']):
     real_link = get_link(video_id, provider)
     if not clean_code:
         extension = code[-4:].lower()
-        for ext in extensions
+        for ext in extensions:
             if extension == "."+ext:
                 #test if url exists
                 if urllib.urlopen(code).getcode() == 200:
