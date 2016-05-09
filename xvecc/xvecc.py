@@ -25,19 +25,21 @@ PROVIDERS_API = {
 }
 
 
-def extract(code):
+def extract(code, extensions = ['mp4']):
     video_id, provider = match(code)
     clean_code = get_clean_code(video_id, provider)
     real_link = get_link(video_id, provider)
     if not clean_code:
-        if code[-4:].lower() == '.mp4':
-            #test if url exists
-            if urllib.urlopen(code).getcode() == 200:
-                return {
-                    'provider': 'mp4',
-                    'real_link': code,
-                    "status": True
-                }
+        extension = code[-4:].lower()
+        for ext in extensions
+            if extension == "."+ext:
+                #test if url exists
+                if urllib.urlopen(code).getcode() == 200:
+                    return {
+                        'provider': ext,
+                        'real_link': code,
+                        "status": True
+                    }
         return {}
     ret = {
         'video_id': video_id,
