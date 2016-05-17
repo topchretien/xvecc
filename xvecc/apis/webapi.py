@@ -12,13 +12,13 @@ class APIError(Exception):
     def __init__(self, *args):
         if isinstance(args, tuple) and len(args) > 1:
             self.errno = args[0]
-            msg = " ".join(args[1:])
+            self.msg = " ".join(args[1:])
             if self.errno >= 300:
                 errtxt = "HTTP Errno"
             else:
                 errtxt = "Errno"
             super(APIError, self).__init__(
-                "[{} {}] {}".format(errtxt, self.errno, msg))
+                "[{} {}] {}".format(errtxt, self.errno, self.msg))
         else:
             super(APIError, self).__init__("".join(args))
 

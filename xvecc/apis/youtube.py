@@ -35,7 +35,7 @@ class YoutubeAPI(WebAPI):
             if self._data['pageInfo']['totalResults'] == 1:
                 return True
             else:
-                return False
+                raise APIError(404, 'Youtube video is not available')
 
         # Manage error situations
         error_msg = 'Unbound Source Error'
@@ -63,7 +63,7 @@ class YoutubeAPI(WebAPI):
     def _is_ok(self, status):
         """Extract privacy policy and upload status to determine availability."""
         if status['uploadStatus'] in ('processed', 'uploaded') \
-                and status['privacyStatus'] == 'public':
+                and status['privacyStatus'] != 'private':
             return True
         return False
 

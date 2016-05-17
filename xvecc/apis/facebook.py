@@ -19,7 +19,7 @@ def set_fb_token(token):
 class FacebookAPI(WebAPI):
     __token__ = 'not_set_put_one'
     __part__ = 'description,length,picture,source,title,status,published,privacy'
-    __url__ = ('/v2.5/{video_id}?fields={part}')
+    __url__ = ('/v2.6/{video_id}?fields={part}')
 
     def __init__(self):
         self._data = {}
@@ -37,7 +37,7 @@ class FacebookAPI(WebAPI):
                 self._data = answer
                 return True
             else:
-                return False
+                raise APIError(404, 'Facebook video is not available')
         except FacebookError as fber:
             raise APIError(fber.code, fber.message)
         except:

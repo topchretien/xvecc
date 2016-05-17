@@ -4,11 +4,15 @@
 from __future__ import print_function
 
 import json
+import re
 import requests
+from bs4 import BeautifulSoup
 
 from functools import wraps
 
 from .webapi import WebAPI, APIError
+
+from ..vecc import providers, core
 
 
 class VimeoAPI(WebAPI):
@@ -56,9 +60,32 @@ class VimeoAPI(WebAPI):
             return requests.get(url, **kwargs)
 
         answer = caller()
+        errorstr = ""
+        self._data = json.loads(answer.content)
         if answer.status_code < 300:
-            self._data = json.loads(answer.content)
             return True
+        else:
+            errorstr = self._data.get('error','')
+            #vimeo specific 2nd try with direct embed address
+            embed_link = core.get_link(
+                self._video_id, "vimeo")
+            test = requests.get('http:'+embed_link)
+            if test.status_code < 300:
+                bs = BeautifulSoup(test.content)
+                scr = bs.findAll('script')
+                for sc in scr:
+                    ff = re.search(r'var t\=(\{[^;]*)', sc.string)
+                    if ff:
+                        allvars = json.loads(ff.group(1))
+                        videovar = allvars['video']
+                        self._results = {}
+                        self._results['title'] = videovar['title']
+                        self._results['duration'] = self._parse_duration(videovar['duration'])
+                        self._results['status'] = True
+                        self._results['image'] = self._get_best_pic_from_player(videovar['thumbs'])
+                        self._results['description'] = ''
+                return True
+
 
         # Manage error situations
         error_msg = 'Unbound Source Error'
@@ -68,6 +95,8 @@ class VimeoAPI(WebAPI):
             error_msg = 'HTTP Client Error'
         if 500 <= answer.status_code < 600:
             error_msg = 'HTTP Server Error'
+        if errorstr:
+            error_msg += ": "+errorstr
         raise APIError(answer.status_code, error_msg)
 
     def _parse_duration(self, vduration):
@@ -89,6 +118,24 @@ class VimeoAPI(WebAPI):
             duration_str = "{} {}".format(days, duration_str)
 
         return duration_str
+
+    def _get_best_pic_from_player(self, pics_info):
+        best_size = 0
+        best_url = ''
+        for size, path in pics_info.items():
+            if size == 'base':
+                if best_size == 0:
+                    best_url = path
+            else:
+                isize = int(size)
+                if isize > best_size:
+                    best_size = isize
+                    best_url = path
+        return best_url
+
+
+
+
 
     def _get_best_picture(self, pics_info):
         """Get the best picture available or None."""

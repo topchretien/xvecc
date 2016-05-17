@@ -29,12 +29,15 @@ class DailymotionAPI(WebAPI):
             fields=self.__fields__)
 
         answer = requests.get(built_url)
+        self._data = json.loads(answer.content)
+        errorstr = ""
         if answer.status_code < 300:
-            self._data = json.loads(answer.content)
             if 'status' in self._data:
                 return True
-            else:
-                return False
+        else:
+            err = self._data.get('error', None)
+            if err:
+                errorstr = err.get('message','')
 
         # Manage error situations
         error_msg = 'Unbound Source Error'
@@ -44,6 +47,8 @@ class DailymotionAPI(WebAPI):
             error_msg = 'HTTP Client Error'
         if 500 <= answer.status_code < 600:
             error_msg = 'HTTP Server Error'
+        if errorstr:
+            error_msg += ": "+errorstr
         raise APIError(answer.status_code, error_msg)
 
     def _is_ok(self, status):

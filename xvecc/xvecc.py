@@ -32,15 +32,34 @@ def extract(code, extensions = ['mp4']):
     if not clean_code:
         extension = code[-4:].lower()
         for ext in extensions:
-            if extension == "."+ext:
+            if extension == "." + ext:
                 #test if url exists
-                if urllib.urlopen(code).getcode() == 200:
-                    return {
-                        'provider': ext,
-                        'real_link': code,
-                        "status": True
-                    }
-        return {}
+                vidinfos = {
+                    'provider': ext,
+                    'real_link': code,
+                }
+                try:
+                    codeid = urllib.urlopen(code).getcode()
+                    if codeid == 200:
+                        vidinfos['status'] = True
+                    else:
+                        vidinfos["errno"] = codeid
+                        if 300 <= codeid < 400:
+                            vidinfos["errmsg"] = 'HTTP Redirection'
+                        if 400 <= codeid < 500:
+                            vidinfos["errmsg"] = 'HTTP Client Error'
+                        if 500 <= codeid < 600:
+                            vidinfos["errmsg"] = 'HTTP Server Error'
+                        vidinfos['status'] = False
+                except IOError as e:
+                    vidinfos['status'] = False
+                    vidinfos["errno"] = -1
+                    vidinfos["errmsg"] = e.strerror
+                return vidinfos
+        return {
+            'status': False,
+            'errno' : -2
+            }
     ret = {
         'video_id': video_id,
         'provider': provider,
@@ -56,10 +75,16 @@ def extract(code, extensions = ['mp4']):
             details = api.video_data
             ret.update(details)
         else:
-            print("details error")
-    except APIError, e:
-        print("status: False")
-        print("{}: {}".format(provider, e))
+            ret["status"] = False
+    except APIError as err:
+        ret["errno"] = err.errno
+        ret["errmsg"] = err.msg
+        ret["status"] = False
+    except Exception as e:
+        if e.__module__ == "requests.exceptions":
+            ret["errno"] = -1
+            ret["errmsg"] = "Error type: " + e.__class__.__name__
+        ret["status"] = False
     return ret
 
 def main():
