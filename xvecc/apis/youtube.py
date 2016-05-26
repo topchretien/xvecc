@@ -6,6 +6,7 @@ from __future__ import print_function
 import json
 import requests
 import re
+import dateutil.parser
 
 from .webapi import WebAPI, APIError
 
@@ -86,6 +87,7 @@ class YoutubeAPI(WebAPI):
                 'image': our_video['snippet']['thumbnails']['high']['url'],
                 'duration': self._parse_duration(
                     our_video['contentDetails']['duration']),
-                'status': self._is_ok(our_video['status'])
+                'status': self._is_ok(our_video['status']),
+                'created_date': dateutil.parser.parse(our_video['snippet']['publishedAt'])
             }
         return self._results

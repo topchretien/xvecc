@@ -6,6 +6,7 @@ from __future__ import print_function
 import json
 import requests
 import re
+import datetime
 
 from .webapi import WebAPI, APIError, convertduration
 
@@ -75,6 +76,7 @@ class DailymotionAPI(WebAPI):
                 'image': our_video['thumbnail_url'],
                 'duration': convertduration(
                     our_video['duration']),
-                'status': self._is_ok(our_video['status'])
+                'status': self._is_ok(our_video['status']),
+                'created_date': datetime.datetime.fromtimestamp(our_video['created_time'])
             }
         return self._results

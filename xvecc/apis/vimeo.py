@@ -6,6 +6,7 @@ from __future__ import print_function
 import json
 import re
 import requests
+import dateutil.parser
 from bs4 import BeautifulSoup
 
 from functools import wraps
@@ -175,7 +176,8 @@ class VimeoAPI(WebAPI):
                 'duration': self._parse_duration(self._data['duration']),
                 'status': self._is_ok(
                     self._data['status'],
-                    self._data['privacy'])
+                    self._data['privacy']),
+                'created_date': dateutil.parser.parse(self._data['created_time'])
             }
         return self._results
 

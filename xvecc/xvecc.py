@@ -39,7 +39,11 @@ def extract(code, extensions = ['mp4']):
                     'real_link': code,
                 }
                 try:
-                    codeid = urllib.urlopen(code).getcode()
+                    if code[0:2] == '//':
+                        getcode = 'http:'+code
+                    else:
+                        getcode = code
+                    codeid = urllib.urlopen(getcode).getcode()
                     if codeid == 200:
                         vidinfos['status'] = True
                     else:
@@ -81,7 +85,7 @@ def extract(code, extensions = ['mp4']):
         ret["errmsg"] = err.msg
         ret["status"] = False
     except Exception as e:
-        if e.__module__ == "requests.exceptions":
+        if hasattr(e, '__module__') and e.__module__ == "requests.exceptions":
             ret["errno"] = -1
             ret["errmsg"] = "Error type: " + e.__class__.__name__
         ret["status"] = False
